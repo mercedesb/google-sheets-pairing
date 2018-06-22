@@ -1,1 +1,3 @@
-ford_fulkerson.rb
+class FordFulkerson
+
+end

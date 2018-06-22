@@ -29,8 +29,8 @@ RSpec.describe GraphBuilder, type: :model do
   describe "#build" do
     it "creates a graph with the expected shape" do
       graph = subject.build
-      expect(graph.nodes.length).to eq(7)
-      expect(graph.edges.length).to eq(5)
+      expect(graph.nodes.length).to eq(9)
+      expect(graph.edges.length).to eq(12)
       expect(graph["s1"].edges.length).to eq(3)
       expect(graph["s2"].edges.length).to eq(1)
       expect(graph["s3"].edges.length).to eq(1)

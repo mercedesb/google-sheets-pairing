@@ -2,7 +2,7 @@ class Node
 
   attr_reader :name
 
-  def initialize(name)
+  def initialize(name, source: false, sink: false)
     @name = name
     @successors = []
   end
