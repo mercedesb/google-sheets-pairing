@@ -1,26 +1,29 @@
+require './models/graph/graph_builder'
+
 class PairingService
-  def initialize(suitors, proposed)
-    @suitors = suitors
-    @proposed = proposed
+  def initialize(mentors, mentees)
+    @mentors = mentors
+    @mentee = mentees
+    @graph_builder = GraphBuilder.new(mentors, mentees)
   end
 
 # TODO: implement maximum bipartite matching, such as Ford-Fulkerson algorithm
   def match
-    available_suitors = @suitors.dup
-    matched_suitors = []
+    available_mentors = @mentors.dup
+    matched_mentors = []
 
-    available_proposed = @proposed.dup
+    available_mentee = @mentee.dup
 
-    available_proposed.each do |current_proposed|
-      matching_suitor = available_suitors.find{ |suitor| suitor.preferences.include?(current_proposed.preference) }
+    available_mentee.each do |current_mentee|
+      matching_mentor = available_mentors.find{ |mentor| mentor.preferences.include?(current_mentee.preference) }
 
-      next if matching_suitor.nil?
+      next if matching_mentor.nil?
 
-      current_proposed.match_with(matching_suitor)
-      matched_suitors << matching_suitor
-      available_suitors.delete(matching_suitor)
+      current_mentee.match_with(matching_mentor)
+      matched_mentors << matching_mentor
+      available_mentors.delete(matching_mentor)
     end
 
-    matched_suitors
+    matched_mentors
   end
 end
