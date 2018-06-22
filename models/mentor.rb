@@ -1,16 +1,16 @@
-class Suitor
+class Mentor
   attr_reader :name
   attr_reader :preferences
   attr_reader :match
 
   def initialize(name, preferences)
     @name = name
-    @preferences = preferences.split(", ")
+    @preferences = preferences
     @match = nil
   end
 
-  def match_with(proposed)
-    @match = proposed
+  def match_with(mentee)
+    @match = mentee
   end
 
   def matched?

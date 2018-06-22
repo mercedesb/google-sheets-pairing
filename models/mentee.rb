@@ -1,4 +1,4 @@
-class Proposed
+class Mentee
   attr_reader :name
   attr_reader :preference
   attr_reader :match
@@ -9,9 +9,9 @@ class Proposed
     @match = nil
   end
 
-  def match_with(suitor)
-    @match = suitor
-    suitor.match_with(self)
+  def match_with(mentor)
+    @match = mentor
+    mentor.match_with(self)
   end
 
   def matched?

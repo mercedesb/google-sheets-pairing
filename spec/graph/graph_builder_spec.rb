@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "suitor"
-require "proposed"
+require "mentor"
+require "mentee"
 require "graph/graph_builder"
 
 RSpec.describe GraphBuilder, type: :model do
   let(:mentors) { [
-      Suitor.new("s1", "a, b"),
-      Suitor.new("s2", "c"),
-      Suitor.new("s3", "a, d")
+      Mentor.new("s1", ["a", "b"]),
+      Mentor.new("s2", ["c"]),
+      Mentor.new("s3", ["a", "d"])
     ] }
   let(:mentees) { [
-      Proposed.new("p1", "a"),
-      Proposed.new("p2", "b"),
-      Proposed.new("p3", "b"),
-      Proposed.new("p4", "c")
+      Mentee.new("p1", "a"),
+      Mentee.new("p2", "b"),
+      Mentee.new("p3", "b"),
+      Mentee.new("p4", "c")
     ] }
 
 # expected:
