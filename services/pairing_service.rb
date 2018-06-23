@@ -4,7 +4,8 @@ class PairingService
   def initialize(mentors, mentees)
     @mentors = mentors
     @mentee = mentees
-    @graph_builder = GraphBuilder.new(mentors, mentees)
+    graph_builder = GraphBuilder.new(mentors, mentees)
+    #@matching_algorithm = FordFulkerson.new(graph_builder.graph)
   end
 
 # TODO: implement maximum bipartite matching, such as Ford-Fulkerson algorithm
