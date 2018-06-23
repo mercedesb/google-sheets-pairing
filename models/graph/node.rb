@@ -28,4 +28,7 @@ class Node
     @successors.length
   end
 
+  def match
+    @successors.find { |edge| edge.matched }
+  end
 end

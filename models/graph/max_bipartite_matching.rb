@@ -2,21 +2,21 @@ class MaxBipartiteMatching
   def initialize(graph)
     # residual graph
     @graph = graph 
-    @mentors_length = graph.length
-    @mentees_length = graph.nodes.values[0].length
   end
 
   # A DFS based recursive function
   # that returns true if a matching 
   # for vertex u is possible
-  # 
-  def bipartite_matching(mentor_node, mentors_assigned_mentees)
-    mentor_node.edges.each_with_index do |mentee_edge,index|
+  
+  def bipartite_matching(mentor_node)
+    mentor_node.edges.each do |mentee_edge|
       if mentee_edge.value == 1 && mentee_edge.visited == false
         mentee_edge.visited = true
 
-        if mentors_assigned_mentees[index] == -1 || bipartite_matching(mentors_assigned_mentees[index], mentors_assigned_mentees)
-          mentors_assigned_mentees[index] = mentor_node
+        # if mentee has not been assigned a mentor or it's a match
+        # set 
+        if mentee_edge.matched == false || bipartite_matching(mentor_node)
+          mentee_edge.matched = true
           return true
         end
       end
@@ -25,12 +25,11 @@ class MaxBipartiteMatching
   end
 
   def maximum_bipartite_matching
-    mentors_assigned_mentees = Array.new(@mentees_length, -1)
-       
     @graph.nodes.each do |mentor_name, mentor_node|
-      bipartite_matching(mentor_node, mentors_assigned_mentees)
+      bipartite_matching(mentor_node)
     end
-    puts mentors_assigned_mentees
-    mentors_assigned_mentees.count { |mentor| mentor != -1 }
+    matches = @graph.matches.compact
+    puts matches.map { |match| "#{match.head_name} -> #{match.tail.name}" }
+    matches.length
   end
 end
