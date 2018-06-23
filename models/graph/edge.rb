@@ -1,9 +1,13 @@
 class Edge
-  attr_reader :head
+  attr_reader :head_name
   attr_reader :tail
-  
-  def initialize(head, tail)
-    @head = head
+  attr_reader :value
+  attr_accessor :visited
+
+  def initialize(head_name, tail, value)
+    @head_name = head_name
     @tail = tail
+    @value = value
+    @visited = false
   end
 end

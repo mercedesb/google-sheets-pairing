@@ -52,7 +52,8 @@ class GraphBuilder
 
       @mentees.each do |mentee|
         value = mentor.preferences.include?(mentee.preference) ? 1 : 0
-        mentor_node.add_edge(value)
+        mentee_node = Node.new(mentee.name)
+        mentor_node.add_edge(mentee_node, value)
       end
     end
     graph

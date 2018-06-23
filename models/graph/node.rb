@@ -11,12 +11,13 @@ class Node
     @successors[index]
   end
 
-  def add_edge(successor)
-    @successors << successor
+  def add_edge(node, edge_value)
+    edge = Edge.new(self.name, node, edge_value)
+    @successors << edge
   end
 
   def to_s
-    "#{@name} -> [#{@successors.map(&:name).join(' ')}]"
+    "#{@name}"
   end
 
   def edges

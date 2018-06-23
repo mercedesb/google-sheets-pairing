@@ -10,13 +10,13 @@ class MaxBipartiteMatching
   # that returns true if a matching 
   # for vertex u is possible
   # 
-  def bipartite_matching(mentor_name, mentors_assigned_mentees, mentees_not_seen_for_current_mentor)
-    @graph[mentor_name].edges.each_with_index do |mentee,index|
-      if mentee == 1 && mentees_not_seen_for_current_mentor[index] == false
-        mentees_not_seen_for_current_mentor[index] = true
+  def bipartite_matching(mentor_node, mentors_assigned_mentees)
+    mentor_node.edges.each_with_index do |mentee_edge,index|
+      if mentee_edge.value == 1 && mentee_edge.visited == false
+        mentee_edge.visited = true
 
-        if mentors_assigned_mentees[index] == -1 || bipartite_matching(mentors_assigned_mentees[index], mentors_assigned_mentees, mentees_not_seen_for_current_mentor)
-          mentors_assigned_mentees[index] = mentor_name
+        if mentors_assigned_mentees[index] == -1 || bipartite_matching(mentors_assigned_mentees[index], mentors_assigned_mentees)
+          mentors_assigned_mentees[index] = mentor_node
           return true
         end
       end
@@ -29,10 +29,7 @@ class MaxBipartiteMatching
        
     count_of_mentors_assigned_mentees = 0
     @graph.nodes.each do |mentor_name, mentor_node|
-    require 'pry';binding.pry
-      mentees_not_seen_for_current_mentor = Array.new(@mentees_length, false)
-
-      if bipartite_matching(mentor_name, mentors_assigned_mentees, mentees_not_seen_for_current_mentor)
+      if bipartite_matching(mentor_node, mentors_assigned_mentees)
         count_of_mentors_assigned_mentees = count_of_mentors_assigned_mentees + 1
       end
     end
