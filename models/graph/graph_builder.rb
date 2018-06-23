@@ -30,15 +30,30 @@ class GraphBuilder
   #   graph
   # end
   
+  # def build
+  #   graph = []
+  #   @mentors.each do |mentor|
+  #     mentor_row = []
+  #     @mentees.each do |mentee|
+  #       value = mentor.preferences.include?(mentee.preference) ? 1 : 0
+  #       mentor_row << value
+  #     end
+  #     graph << mentor_row
+  #   end
+  #   graph
+  # end
+
   def build
-    graph = []
+    graph = Graph.new
+
     @mentors.each do |mentor|
-      mentor_row = []
+      mentor_node = Node.new(mentor.name)
+      graph.add_node(mentor_node)
+
       @mentees.each do |mentee|
         value = mentor.preferences.include?(mentee.preference) ? 1 : 0
-        mentor_row << value
+        mentor_node.add_edge(value)
       end
-      graph << mentor_row
     end
     graph
   end

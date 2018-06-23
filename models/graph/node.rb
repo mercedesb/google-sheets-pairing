@@ -2,9 +2,13 @@ class Node
 
   attr_reader :name
 
-  def initialize(name, source: false, sink: false)
+  def initialize(name)
     @name = name
     @successors = []
+  end
+
+  def [](index)
+    @successors[index]
   end
 
   def add_edge(successor)
@@ -17,6 +21,10 @@ class Node
 
   def edges
     @successors
+  end
+
+  def length
+    @successors.length
   end
 
 end

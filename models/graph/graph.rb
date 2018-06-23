@@ -7,24 +7,25 @@ class Graph
   attr_reader :nodes
 
   def initialize
-    # @nodes = {}
-    @nodes = []
+    @nodes = {}
   end
 
   def add_node(node)
+    @nodes[node.name] = node
   end
 
-  # def add_node(node)
-  #   @nodes[node.name] = node
-  # end
+  def [](name)
+    @nodes[name]
+  end
 
+  def length
+    @nodes.length
+  end
+  
   # def add_edge(predecessor, successor)
   #   @nodes[predecessor.name].add_edge(@nodes[successor.name])
   # end
 
-  # def [](name)
-  #   @nodes[name]
-  # end
 
   # def edges
   #   edges = []
