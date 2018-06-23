@@ -1,5 +1,5 @@
-require './models/mentor'
-require './models/mentee'
+require './models/pairing/mentor'
+require './models/pairing/mentee'
 
 class EntityFactory
 
