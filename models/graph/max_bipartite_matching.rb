@@ -27,13 +27,10 @@ class MaxBipartiteMatching
   def maximum_bipartite_matching
     mentors_assigned_mentees = Array.new(@mentees_length, -1)
        
-    count_of_mentors_assigned_mentees = 0
     @graph.nodes.each do |mentor_name, mentor_node|
-      if bipartite_matching(mentor_node, mentors_assigned_mentees)
-        count_of_mentors_assigned_mentees = count_of_mentors_assigned_mentees + 1
-      end
+      bipartite_matching(mentor_node, mentors_assigned_mentees)
     end
     puts mentors_assigned_mentees
-    count_of_mentors_assigned_mentees
+    mentors_assigned_mentees.count { |mentor| mentor != -1 }
   end
 end
