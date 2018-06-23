@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "mentor"
-require "mentee"
+require "pairing/mentor"
+require "pairing/mentee"
+require "pairing/mentorship_value_calculator"
 require "graph/graph_builder"
 
 RSpec.describe GraphBuilder, type: :model do
@@ -18,7 +19,7 @@ RSpec.describe GraphBuilder, type: :model do
       Mentee.new("p4", "c")
     ] }
 
-  subject { described_class.new(mentors, mentees) }
+  subject { described_class.new(mentors, mentees, MentorshipValueCalculator.new) }
   
   # expected: 
   # [1 1 1 0]

@@ -1,11 +1,12 @@
 require './models/graph/graph_builder'
+require './models/pairing/mentorship_value_calculator'
 
 class PairingService
   def initialize(mentors, mentees)
     @mentors = mentors
     @mentee = mentees
-    graph_builder = GraphBuilder.new(mentors, mentees)
-    #@matching_algorithm = FordFulkerson.new(graph_builder.graph)
+    value_calculator = MentorshipValueCalculator.new
+    graph_builder = GraphBuilder.new(mentors, mentees, value_calculator)
   end
 
 # TODO: implement maximum bipartite matching, such as Ford-Fulkerson algorithm

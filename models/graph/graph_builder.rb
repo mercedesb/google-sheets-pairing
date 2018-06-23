@@ -2,22 +2,23 @@ require './models/graph/graph'
 require './models/graph/node'
 
 class GraphBuilder
-  def initialize(mentors, mentees)
-    @mentors = mentors
-    @mentees = mentees
+  def initialize(primary_nodes, secondary_nodes, value_calculator)
+    @primary_nodes = primary_nodes
+    @secondary_nodes = secondary_nodes
+    @value_calculator = value_calculator
   end
 
   def build
     graph = Graph.new
 
-    @mentors.each do |mentor|
-      mentor_node = Node.new(mentor.name)
-      graph.add_node(mentor_node)
+    @primary_nodes.each do |primary|
+      primary_node = Node.new(primary.name)
+      graph.add_node(primary_node)
 
-      @mentees.each do |mentee|
-        value = mentor.preferences.include?(mentee.preference) ? 1 : 0
-        mentee_node = Node.new(mentee.name)
-        mentor_node.add_edge(mentee_node, value)
+      @secondary_nodes.each do |secondary|
+        value = @value_calculator.get_value(primary, secondary)
+        secondary_node = Node.new(secondary.name)
+        primary_node.add_edge(secondary_node, value)
       end
     end
     graph

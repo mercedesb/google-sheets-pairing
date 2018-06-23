@@ -3,8 +3,9 @@
 require "spec_helper"
 require "graph/max_bipartite_matching"
 require "graph/graph_builder"
-require "mentor"
-require "mentee"
+require "pairing/mentor"
+require "pairing/mentee"
+require "pairing/mentorship_value_calculator"
 
 RSpec.describe MaxBipartiteMatching, type: :model do
   let(:mentors) { [
@@ -31,7 +32,7 @@ RSpec.describe MaxBipartiteMatching, type: :model do
   #         [0, 0, 0, 0, 0, 0],
   #         [0, 0, 0, 0, 0, 1]] }
 
-  let(:graph) { GraphBuilder.new(mentors, mentees).build }
+  let(:graph) { GraphBuilder.new(mentors, mentees, MentorshipValueCalculator.new).build }
   subject { described_class.new(graph) }
 
 
