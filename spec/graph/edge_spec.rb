@@ -16,13 +16,11 @@ RSpec.describe Edge, type: :model do
        expect(subject.respond_to?(:tail)).to eq true
        expect(subject.respond_to?(:value)).to eq true
        expect(subject.respond_to?(:visited)).to eq true
-       expect(subject.respond_to?(:matched)).to eq true
        
     end
 
     it "writes attrs" do
       expect(subject.respond_to?(:visited=)).to eq true
-      expect(subject.respond_to?(:matched=)).to eq true
     end
   end
 end

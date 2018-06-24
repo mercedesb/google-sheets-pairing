@@ -6,6 +6,7 @@ class Node
   def initialize(name)
     @name = name
     @edges = []
+    @match = nil
   end
 
   def add_edge(node, edge_value)
@@ -14,10 +15,6 @@ class Node
 
   def edges
     @edges
-  end
-
-  def match
-    @edges.find { |edge| edge.matched }
   end
 
   def length

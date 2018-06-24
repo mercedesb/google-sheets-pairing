@@ -1,5 +1,6 @@
 class Graph
   attr_reader :nodes
+  attr_accessor :matches
 
   def initialize
     @nodes = {}
@@ -15,13 +16,5 @@ class Graph
 
   def length
     @nodes.length
-  end
-
-  def matches
-    matches = []
-    @nodes.each  do |node_name, node|
-      matches << node.match
-    end
-    matches
   end
 end
