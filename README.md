@@ -1,7 +1,5 @@
 # google-sheets-pairing
 
-# Project Title
-
 A simple ruby CLI app for maximally matching data from Google sheets.
 
 The main runner (`matcher.rb`) is currently set up and configured to read Dev Together event registrations and match mentors and mentees based on the languages and frameworks they have in common.
