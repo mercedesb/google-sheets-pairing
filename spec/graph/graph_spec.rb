@@ -22,7 +22,7 @@ RSpec.describe Graph, type: :model do
     end
   end
 
-  describe "#edges" do
+  describe "#nodes" do
     it "returns a hash" do
       expect(subject.nodes).to eq({})
     end
