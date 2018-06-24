@@ -24,8 +24,8 @@ ruby matcher.rb
 
 You will be prompted for a Mentor Sheet Id and a Mentee Sheet Id. These can be found in the url of your Google Sheets.
 
-```https://docs.google.com/spreadsheets/d/the_id_is_found_here_and_is_rather_long/edit#gid=0
-```
+https://docs.google.com/spreadsheets/d/**the_id_is_found_here_and_is_rather_long**/edit#gid=0
+
 
 ## Running the tests
 
