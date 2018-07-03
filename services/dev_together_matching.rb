@@ -4,7 +4,7 @@ module DevTogetherMatching
   MENTOR_ID_RANGE = "C2:C50"
   MENTOR_PREFERENCES_RANGE = "D2:D50"
   MENTEE_ID_RANGE = "C2:C50"
-  MENTEE_PREFERENCE_RANGE = "D2:D50"
+  MENTEE_PREFERENCE_RANGE = "F2:F50"
 
   def self.entity_factory
     @entity_factory ||= EntityFactory.new
