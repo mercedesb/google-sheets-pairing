@@ -31,13 +31,13 @@ RSpec.describe MaxBipartiteMatching, type: :model do
       Mentee.new("I", "React")
     ] }
 
-  let(:graph) { GraphBuilder.new(mentors, mentees, MentorshipValueCalculator.new).build }
-  subject { described_class.new(graph) }
+  let(:graph) { GraphBuilder.new.build(mentors, mentees, MentorshipValueCalculator.new) }
+  subject { described_class.new }
 
 
-  describe "#maximum_bipartite_matching" do
+  describe "#match" do
     it "returns the max number of matches" do
-      expect(subject.maximum_bipartite_matching.matches.length).to eq(7)
+      expect(subject.match(graph).matches.length).to eq(7)
     end
   end
 end

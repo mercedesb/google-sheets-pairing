@@ -19,7 +19,7 @@ RSpec.describe GraphBuilder, type: :model do
       Mentee.new("p4", "c")
     ] }
 
-  subject { described_class.new(mentors, mentees, MentorshipValueCalculator.new) }
+  subject { described_class.new }
   
   # expected: 
   # [1 1 1 0]
@@ -28,7 +28,7 @@ RSpec.describe GraphBuilder, type: :model do
 
   describe "#build" do
     it "creates a graph with the expected shape" do
-      graph = subject.build
+      graph = subject.build(mentors, mentees, MentorshipValueCalculator.new)
       expect(graph.length).to eq(3)
       expect(graph["s1"].length).to eq(4)
       expect(graph["s1"].edges.map {|edge| edge.value}).to eq([1, 1, 1, 0])

@@ -1,10 +1,7 @@
 class MaxBipartiteMatching
-  def initialize(graph)
+  def match(graph)
     # residual graph
     @graph = graph 
-  end
-
-  def match
     maximum_bipartite_matching
   end
 

@@ -16,6 +16,8 @@ class DevTogetherMatching
     @sheets_service = GoogleSheetsService.new
     @entity_factory = EntityFactory.new
     @value_calculator = MentorshipValueCalculator.new
+    @graph_builder = GraphBuilder.new
+    @matching_algorithm = MaxBipartiteMatching.new
     @mentors = []
     @mentees = []
   end
@@ -24,11 +26,9 @@ class DevTogetherMatching
     @mentors = mentors(mentor_data.value_ranges[0], mentor_data.value_ranges[1])
     @mentees =  mentees(mentee_data.value_ranges[0], mentee_data.value_ranges[1])
 
-    graph_builder = GraphBuilder.new(@mentors, @mentees, @value_calculator)
-    mentorship_graph = graph_builder.build
-    matching_algorithm = MaxBipartiteMatching.new(mentorship_graph)
-    graph = matching_algorithm.match
-    output(graph.matches)
+    mentorship_graph = @graph_builder.build(@mentors, @mentees, @value_calculator)
+    matched_graph = @matching_algorithm.match(mentorship_graph)
+    output(matched_graph.matches)
   end
 
   def mentor_data
