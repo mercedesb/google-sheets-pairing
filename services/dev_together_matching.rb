@@ -5,10 +5,17 @@ require "./models/graph/max_bipartite_matching"
 require './models/pairing/mentorship_value_calculator'
 
 class DevTogetherMatching
-  MENTOR_ID_RANGE = "C2:C50"
-  MENTOR_PREFERENCES_RANGE = "D2:D50"
-  MENTEE_ID_RANGE = "C2:C50"
-  MENTEE_PREFERENCE_RANGE = "F2:F50"
+
+  module SheetRanges
+    NAME_RANGE = "B2:B50"
+    EMAIL_RANGE = "C2:C50"
+    REGISTRATION_TYPE_RANGE = "D2:D50"
+    MENTOR_LANG_RANGE = "E2:E50"
+    MENTEE_CODE_RANGE = "G2:G50"
+    MENTEE_FEEDBACK_RANGE = "H2:H50"
+    MENTEE_LANG_RANGE = "I2:I50"
+  end
+
 
   def initialize(mentor_sheet_id, mentee_sheet_id)
     @mentor_sheet_id = mentor_sheet_id
@@ -32,7 +39,7 @@ class DevTogetherMatching
   end
 
   def mentor_data
-    @mentor_data ||= @sheets_service.batch_get_values(@mentor_sheet_id, [MENTOR_ID_RANGE, MENTOR_PREFERENCES_RANGE])
+    @mentor_data ||= @sheets_service.batch_get_values(@mentor_sheet_id, SheetRanges.constants)
   end
 
   def mentee_data
