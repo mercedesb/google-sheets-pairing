@@ -7,7 +7,7 @@ else
   first_sheet_id = gets.chomp
 end
 
-if ARGV[0]
+if ARGV[1]
   second_sheet_id = ARGV[1]
 else
   puts 'Second Sheet Id:'
