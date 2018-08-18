@@ -26,4 +26,8 @@ class Node
   def to_s
     @entity.to_s
   end
+
+  def spreadsheet_data
+    @entity.spreadsheet_data
+  end
 end

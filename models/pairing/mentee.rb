@@ -10,6 +10,10 @@ class Mentee
   end
 
   def to_s
-    "#{name}, #{email}, #{code_link}, #{feedback_type}, #{preference}"
+    "#{name}, #{email}, #{code_link}, #{feedback_type}"
+  end
+
+  def spreadsheet_data
+    [name, email, code_link, feedback_type]
   end
 end

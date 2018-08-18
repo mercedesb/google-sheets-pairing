@@ -14,4 +14,8 @@ class Edge
   def to_s
     "#{head.to_s}, #{tail.to_s}"
   end
+
+  def spreadsheet_data
+    head.spreadsheet_data.push(*tail.spreadsheet_data)
+  end
 end
