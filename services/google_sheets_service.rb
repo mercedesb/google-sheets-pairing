@@ -63,10 +63,10 @@ class GoogleSheetsService
     result
   end
 
-  def batch_get_values(spreadsheet_id, ranges)
-    range_names = ranges #[]
+  def batch_get_values(spreadsheet_id, range_names)
     result = @service.batch_get_spreadsheet_values(spreadsheet_id,
-                                                  ranges: range_names)
+                                                  ranges: range_names,
+                                                  major_dimension: "ROWS")
     puts "#{result.value_ranges.length} ranges retrieved."
     result
   end
