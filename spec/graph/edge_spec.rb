@@ -2,10 +2,11 @@
 
 require "spec_helper"
 require "graph/edge"
+require "ostruct"
 
 RSpec.describe Edge, type: :model do
-  let(:head) { Node.new("r1") }
-  let(:tail) { Node.new("e1") }
+  let(:head) { Node.new(OpenStruct.new(:name => "r1")) }
+  let(:tail) { Node.new(OpenStruct.new(:name => "e1")) }
   let(:value) { 0 }
 
   subject { described_class.new(head, tail, value) }

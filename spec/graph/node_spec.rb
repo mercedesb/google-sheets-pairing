@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "ostruct"
 
 RSpec.describe Node, type: :model do
   let(:name) { "r1" }
+  let(:entity) { Node.new(OpenStruct.new(:name => name)) }
 
-  subject { described_class.new(name) }
+  subject { described_class.new(entity) }
 
   describe "#attrs" do
     it "reads attrs" do
@@ -15,7 +17,7 @@ RSpec.describe Node, type: :model do
 
   describe "#add_edge" do
     it "adds an edge to edges array" do
-      new_node = Node.new("new")
+      new_node = Node.new(OpenStruct.new(:name => "new"))
       current_length = subject.length
 
       subject.add_edge(new_node, 0)

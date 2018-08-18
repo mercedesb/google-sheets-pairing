@@ -13,7 +13,7 @@ RSpec.describe Graph, type: :model do
 
   describe "#add_node" do
     it "adds an node to nodes hash" do
-      new_node = Node.new("new")
+      new_node = Node.new(OpenStruct.new(:name => "new"))
       current_length = subject.length
 
       subject.add_node(new_node)

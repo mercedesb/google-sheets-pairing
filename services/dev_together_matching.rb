@@ -25,9 +25,10 @@ class DevTogetherMatching
 
     mentorship_graph = @graph_builder.build(mentors, mentees, @value_calculator)
     matched_graph = @matching_algorithm.match(mentorship_graph)
-    output(matched_graph.matches)
     update_pairings_in_sheets(matched_graph)
   end
+
+  private
 
   def sheet_data
     @sheet_data ||= @sheets_service.batch_get_values(@spreadsheet_id, [SHEET_RANGE])
@@ -64,7 +65,15 @@ class DevTogetherMatching
     @sheets_service.batch_update(@spreadsheet_id, "#{NEW_SHEET_TITLE}!A1:H50", update_values)
   end
 
-  def add_pair_rows(matched_graph, update_values)
+  def add_pairing_sheet
+    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, NEW_SHEET_TITLE)
+  end
+
+  def headers
+    ["Mentor Email Sent", "Mentee Email Sent", "Mentor Name", "Mentor Email", "Mentee Name", "Mentee Email", "Mentee Code", "Type of feedback"]
+  end
+
+    def add_pair_rows(matched_graph, update_values)
     row_length = headers.length
 
     matched_graph.matches.each do |pair| 
@@ -88,25 +97,5 @@ class DevTogetherMatching
     update_values << ["Unmatched mentees"]
     unmatched_mentees = mentees - matched_graph.matches.map{ |a| a.tail.entity }
     unmatched_mentees.each { |entity| update_values << entity.spreadsheet_data }
-  end
-
-  def output(matches)
-    puts
-    puts 'Pairs'
-    puts matches.map { |pair| pair.to_s }
-    puts
-    puts 'Unmatched Mentors:'
-    puts mentors.map{|a| a.name} - matches.map{|a| a.head.name}
-    puts
-    puts 'Unmatched Mentees:'
-    puts mentees.map{|a| a.name} - matches.map{|a| a.tail.name}
-  end
-
-  def add_pairing_sheet
-    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, NEW_SHEET_TITLE)
-  end
-
-  def headers
-    ["Mentor Email Sent", "Mentee Email Sent", "Mentor Name", "Mentor Email", "Mentee Name", "Mentee Email", "Mentee Code", "Type of feedback"]
   end
 end
