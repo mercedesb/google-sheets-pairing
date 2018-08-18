@@ -2,7 +2,7 @@
 
 A simple ruby CLI app for maximally matching data from Google sheets.
 
-The main runner (`matcher.rb`) is currently set up and configured to read Dev Together event registrations and match mentors and mentees based on the languages and frameworks they have in common.
+The main runner (`main.rb`) is currently set up and configured to read Dev Together event registrations and match mentors and mentees based on the languages and frameworks they have in common.
 
 The code uses an iteration on the Edmonds matrix in order to calculate a maximum bipartite matching of the 2 data sets.
 
@@ -19,12 +19,14 @@ Copy the client_secret.json into the root of the repo.
 
 ## Usage
 ```
-ruby matcher.rb
+ruby main.rb
 ```
 
-You will be prompted for a Mentor Sheet Id and a Mentee Sheet Id. These can be found in the url of your Google Sheets.
+You will be prompted for a Spreadsheet Id. This can be found in the url of your Google Sheets.
 
 https://docs.google.com/spreadsheets/d/**the_id_is_found_here_and_is_rather_long**/edit#gid=0
+
+You can also pass the argument in rather than wait for input `ruby main.rb SPREADSHEET_ID`
 
 
 ## Running the tests
