@@ -24,7 +24,7 @@ class MaxBipartiteMatching
         child_edge.visited = true
 
         # if child_edge has not been matched or it's a match with the parent_node
-        if !matched_edges[index] || bipartite_matching(@graph[matched_edges[index].head_name], matched_edges)
+        if !matched_edges[index] || bipartite_matching(@graph[matched_edges[index].head.name], matched_edges)
           matched_edges[index] = child_edge
           return true
         end

@@ -54,7 +54,7 @@ class DevTogetherMatching
     puts matches.map { |pair| pair.to_s }
     puts
     puts 'Unmatched Mentors:'
-    puts mentors.map{|a| a.name} - matches.map{|a| a.head_name}
+    puts mentors.map{|a| a.name} - matches.map{|a| a.head.name}
     puts
     puts 'Unmatched Mentees:'
     puts mentees.map{|a| a.name} - matches.map{|a| a.tail.name}

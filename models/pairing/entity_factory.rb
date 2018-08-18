@@ -16,11 +16,11 @@ class EntityFactory
 
   private
   def get_mentor(name_data, email_data, preferences_data)
-    Mentor.new(name_data, preferences_data.split(", "))
+    Mentor.new(name_data, email_data, preferences_data.split(", "))
   end
 
   def get_mentee(name_data, email_data, code_link_data, feedback_type_data, preference_data)
-    Mentee.new(name_data, preference_data)
+    Mentee.new(name_data, email_data, code_link_data, feedback_type_data, preference_data)
   end
 
 end
