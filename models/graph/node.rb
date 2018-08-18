@@ -3,6 +3,7 @@ require 'forwardable'
 
 class Node
   attr_reader :name
+  attr_reader :entity
 
   def initialize(entity)
     @entity = entity

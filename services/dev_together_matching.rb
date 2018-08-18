@@ -8,6 +8,7 @@ require './models/pairing/mentorship_value_calculator'
 
 class DevTogetherMatching
   SHEET_RANGE = "B2:I50"
+  NEW_SHEET_TITLE = "Pairing"
 
   def initialize(spreadsheet_id)
     @spreadsheet_id = spreadsheet_id
@@ -51,10 +52,20 @@ class DevTogetherMatching
 
   def update_pairings_in_sheets(matched_graph)
     pairing_sheet_id = add_pairing_sheet
-    row_length = headers.length
 
     update_values = []
     update_values << headers
+    add_pair_rows(matched_graph, update_values)
+    update_values << []
+    add_unmatched_mentor_rows(matched_graph, update_values)
+    update_values << []
+    add_unmatched_mentee_rows(matched_graph, update_values)
+    
+    @sheets_service.batch_update(@spreadsheet_id, "#{NEW_SHEET_TITLE}!A1:H50", update_values)
+  end
+
+  def add_pair_rows(matched_graph, update_values)
+    row_length = headers.length
 
     matched_graph.matches.each do |pair| 
       row_value = [].push(*pair.spreadsheet_data)
@@ -65,13 +76,18 @@ class DevTogetherMatching
 
       update_values << row_value
     end
+  end
 
-    # x = []
-    # x.push(*matched_graph.matches)
-    # x << "Unmatched mentors"
-    # unmatched_mentors = matched_graph.nodes - matches.map{|a| a.head}
+  def add_unmatched_mentor_rows(matched_graph, update_values)
+    update_values << ["Unmatched mentors"]
+    unmatched_mentors = mentors - matched_graph.matches.map{ |a| a.head.entity }
+    unmatched_mentors.each { |entity| update_values << entity.spreadsheet_data }
+  end
 
-    @sheets_service.batch_update(@spreadsheet_id, "Pairing!A1:H50", update_values)
+  def add_unmatched_mentee_rows(matched_graph, update_values)
+    update_values << ["Unmatched mentees"]
+    unmatched_mentees = mentees - matched_graph.matches.map{ |a| a.tail.entity }
+    unmatched_mentees.each { |entity| update_values << entity.spreadsheet_data }
   end
 
   def output(matches)
@@ -87,7 +103,7 @@ class DevTogetherMatching
   end
 
   def add_pairing_sheet
-    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, "Pairing")
+    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, NEW_SHEET_TITLE)
   end
 
   def headers
