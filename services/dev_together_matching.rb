@@ -1,69 +1,106 @@
 require './services/google_sheets_service'
 require './models/pairing/entity_factory'
+require './models/pairing/mentor'
+require './models/pairing/mentee'
 require './models/graph/graph_builder'
 require "./models/graph/max_bipartite_matching"
 require './models/pairing/mentorship_value_calculator'
 
 class DevTogetherMatching
-  MENTOR_ID_RANGE = "C2:C50"
-  MENTOR_PREFERENCES_RANGE = "D2:D50"
-  MENTEE_ID_RANGE = "C2:C50"
-  MENTEE_PREFERENCE_RANGE = "F2:F50"
+  SHEET_RANGE = "B2:I50"
+  NEW_SHEET_TITLE = "Pairing"
 
-  def initialize(mentor_sheet_id, mentee_sheet_id)
-    @mentor_sheet_id = mentor_sheet_id
-    @mentee_sheet_id = mentee_sheet_id
+  def initialize(spreadsheet_id)
+    @spreadsheet_id = spreadsheet_id
     @sheets_service = GoogleSheetsService.new
     @entity_factory = EntityFactory.new
     @value_calculator = MentorshipValueCalculator.new
     @graph_builder = GraphBuilder.new
     @matching_algorithm = MaxBipartiteMatching.new
-    @mentors = []
-    @mentees = []
   end
 
   def run
-    @mentors = mentors(mentor_data.value_ranges[0], mentor_data.value_ranges[1])
-    @mentees =  mentees(mentee_data.value_ranges[0], mentee_data.value_ranges[1])
+    puts "Getting Google sheets data"
+    attendee_data = sheet_data.value_ranges[0].values
+    puts "Got Google sheets data"
+    entities(attendee_data)
 
-    mentorship_graph = @graph_builder.build(@mentors, @mentees, @value_calculator)
+    mentorship_graph = @graph_builder.build(mentors, mentees, @value_calculator)
+    puts "Matching Mentors and Mentees"
     matched_graph = @matching_algorithm.match(mentorship_graph)
-    output(matched_graph.matches)
+    puts "Writing pairs to new tab in spreadsheet"
+    update_pairings_in_sheets(matched_graph)
+    puts "Done 💅"
   end
 
-  def mentor_data
-    @mentor_data ||= @sheets_service.batch_get_values(@mentor_sheet_id, [MENTOR_ID_RANGE, MENTOR_PREFERENCES_RANGE])
+  private
+
+  def sheet_data
+    @sheet_data ||= @sheets_service.batch_get_values(@spreadsheet_id, [SHEET_RANGE])
   end
 
-  def mentee_data
-    @mentee_data ||= @sheets_service.batch_get_values(@mentee_sheet_id, [MENTEE_ID_RANGE, MENTEE_PREFERENCE_RANGE])
-  end
-
-  def mentors(name_data, preferences_data)
-    mentors = []
-    name_data.values.each_with_index do |name, index|
-      mentors << @entity_factory.get_mentor(name, preferences_data.values[index])
+  def entities(data)
+    return @entities if defined? @entities
+    @entities = []
+    data.each do |data_row|
+      @entities << @entity_factory.get_entity(data_row)
     end
-    mentors
+    @entities
   end
 
-  def mentees(name_data, preference_data)
-    mentees = []
-    name_data.values.each_with_index do |name, index|
-      mentees << @entity_factory.get_mentee(name, preference_data.values[index])
+  def mentors
+    @entities.select { |e| e.is_a?(Mentor) }
+  end
+
+  def mentees
+    @entities.select { |e| e.is_a?(Mentee) }
+  end
+
+  def update_pairings_in_sheets(matched_graph)
+    pairing_sheet_id = add_pairing_sheet
+
+    update_values = []
+    update_values << headers
+    add_pair_rows(matched_graph, update_values)
+    update_values << []
+    add_unmatched_mentor_rows(matched_graph, update_values)
+    update_values << []
+    add_unmatched_mentee_rows(matched_graph, update_values)
+    
+    @sheets_service.batch_update(@spreadsheet_id, "#{NEW_SHEET_TITLE}!A1:H50", update_values)
+  end
+
+  def add_pairing_sheet
+    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, NEW_SHEET_TITLE)
+  end
+
+  def headers
+    ["Mentor Email Sent", "Mentee Email Sent", "Mentor Name", "Mentor Email", "Mentee Name", "Mentee Email", "Mentee Code", "Type of feedback"]
+  end
+
+    def add_pair_rows(matched_graph, update_values)
+    row_length = headers.length
+
+    matched_graph.matches.each do |pair| 
+      row_value = [].push(*pair.spreadsheet_data)
+
+      while row_value.length < row_length
+        row_value.unshift("")
+      end
+
+      update_values << row_value
     end
-    mentees
   end
 
-  def output(matches)
-    puts
-    puts 'Pairs'
-    puts matches.map { |pair| pair.to_s }
-    puts
-    puts 'Unmatched Mentors:'
-    puts @mentors.map{|a| a.name} - matches.map{|a| a.head_name}
-    puts
-    puts 'Unmatched Mentees:'
-    puts @mentees.map{|a| a.name} - matches.map{|a| a.tail.name}
+  def add_unmatched_mentor_rows(matched_graph, update_values)
+    update_values << ["Unmatched mentors"]
+    unmatched_mentors = mentors - matched_graph.matches.map{ |a| a.head.entity }
+    unmatched_mentors.each { |entity| update_values << entity.spreadsheet_data }
+  end
+
+  def add_unmatched_mentee_rows(matched_graph, update_values)
+    update_values << ["Unmatched mentees"]
+    unmatched_mentees = mentees - matched_graph.matches.map{ |a| a.tail.entity }
+    unmatched_mentees.each { |entity| update_values << entity.spreadsheet_data }
   end
 end

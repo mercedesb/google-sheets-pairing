@@ -4,7 +4,7 @@ require "spec_helper"
 require "pairing/mentee"
 
 RSpec.describe Mentee, type: :model do
-  subject { described_class.new("e1", "c") }
+  subject { described_class.new("e1", "email", "code", "feedback", "c") }
 
   describe "#attrs" do
     it "reads attrs" do

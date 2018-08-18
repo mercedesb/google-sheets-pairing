@@ -22,7 +22,7 @@ class GoogleSheetsService
   OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
   CLIENT_SECRETS_PATH = 'client_secret.json'.freeze
   CREDENTIALS_PATH = 'token.yaml'.freeze
-  SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY
+  SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
 
   def initialize
     client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)
@@ -48,7 +48,7 @@ class GoogleSheetsService
       url = @authorizer.get_authorization_url(base_url: OOB_URI)
       puts 'Open the following URL in the browser and enter the ' \
            "resulting code after authorization:\n" + url
-      code = gets
+      code = STDIN.gets
       credentials = @authorizer.get_and_store_credentials_from_code(
         user_id: @user_id, code: code, base_url: OOB_URI
       )
@@ -63,11 +63,45 @@ class GoogleSheetsService
     result
   end
 
-  def batch_get_values(spreadsheet_id, ranges)
-    range_names = ranges #[]
+  def batch_get_values(spreadsheet_id, range_names)
     result = @service.batch_get_spreadsheet_values(spreadsheet_id,
-                                                  ranges: range_names)
-    puts "#{result.value_ranges.length} ranges retrieved."
+                                                  ranges: range_names,
+                                                  major_dimension: "ROWS")
     result
+  end
+
+  def batch_update(spreadsheet_id, range, values)
+    data = [
+      {
+        range: range,
+        majorDimension: "ROWS",
+        values: values
+      }
+    ]
+    request_body = Google::Apis::SheetsV4::BatchUpdateValuesRequest.new(value_input_option: "USER_ENTERED", data: data)
+    response = @service.batch_update_values(spreadsheet_id, request_body)  
+  end
+
+  def add_sheet(spreadsheet_id, title)
+    requests = [ 
+      { 
+        addSheet: {
+          properties: {
+            title: title
+          }
+        } 
+      } 
+    ] 
+    request_body = Google::Apis::SheetsV4::BatchUpdateSpreadsheetRequest.new(requests: requests)
+
+    begin
+      response = @service.batch_update_spreadsheet(spreadsheet_id, request_body)
+      sheet = response.replies[0].add_sheet
+    rescue Google::Apis::ClientError
+      response = @service.get_spreadsheet(spreadsheet_id, fields: "sheets.properties.sheetId,sheets.properties.title")
+      sheet = response.sheets.find { |sheet| sheet.properties.title == title }
+    end
+
+    sheet.properties.sheet_id
   end
 end

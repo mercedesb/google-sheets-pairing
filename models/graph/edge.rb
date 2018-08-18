@@ -1,17 +1,21 @@
 class Edge
-  attr_reader :head_name
+  attr_reader :head
   attr_reader :tail
   attr_reader :value
   attr_accessor :visited
 
-  def initialize(head_name, tail, value)
-    @head_name = head_name
-    @tail = tail
+  def initialize(head_node, tail_node, value)
+    @head = head_node
+    @tail = tail_node
     @value = value
     @visited = false
   end
 
   def to_s
-    "#{head_name} -> #{tail.name}"
+    "#{head.to_s}, #{tail.to_s}"
+  end
+
+  def spreadsheet_data
+    head.spreadsheet_data.push(*tail.spreadsheet_data)
   end
 end

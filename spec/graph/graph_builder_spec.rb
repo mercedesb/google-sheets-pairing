@@ -8,15 +8,15 @@ require "graph/graph_builder"
 
 RSpec.describe GraphBuilder, type: :model do
   let(:mentors) { [
-      Mentor.new("s1", ["a", "b"]),
-      Mentor.new("s2", ["c"]),
-      Mentor.new("s3", ["a", "d"])
+      Mentor.new("s1", "email", ["a", "b"]),
+      Mentor.new("s2", "email", ["c"]),
+      Mentor.new("s3", "email", ["a", "d"])
     ] }
   let(:mentees) { [
-      Mentee.new("p1", "a"),
-      Mentee.new("p2", "b"),
-      Mentee.new("p3", "b"),
-      Mentee.new("p4", "c")
+      Mentee.new("p1", "email", "code", "feedback", "a"),
+      Mentee.new("p2", "email", "code", "feedback", "b"),
+      Mentee.new("p3", "email", "code", "feedback", "b"),
+      Mentee.new("p4", "email", "code", "feedback", "c")
     ] }
 
   subject { described_class.new }
