@@ -20,12 +20,17 @@ class DevTogetherMatching
   end
 
   def run
+    puts "Getting Google sheets data"
     attendee_data = sheet_data.value_ranges[0].values
+    puts "Got Google sheets data"
     entities(attendee_data)
 
     mentorship_graph = @graph_builder.build(mentors, mentees, @value_calculator)
+    puts "Matching Mentors and Mentees"
     matched_graph = @matching_algorithm.match(mentorship_graph)
+    puts "Writing pairs to new tab in spreadsheet"
     update_pairings_in_sheets(matched_graph)
+    puts "Done 💅"
   end
 
   private

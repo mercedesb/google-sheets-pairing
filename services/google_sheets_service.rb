@@ -67,7 +67,6 @@ class GoogleSheetsService
     result = @service.batch_get_spreadsheet_values(spreadsheet_id,
                                                   ranges: range_names,
                                                   major_dimension: "ROWS")
-    puts "#{result.value_ranges.length} ranges retrieved."
     result
   end
 
