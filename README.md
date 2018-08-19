@@ -15,7 +15,9 @@ bundle install
 
 You'll need to create a Google client secret in order to use the Sheets API. [Follow step 1 here](https://developers.google.com/sheets/api/quickstart/ruby)
 
-Copy the client_secret.json into the root of the repo.
+Copy the `client_secret.json` into the root of the repo.
+
+The first time you run the CLI, you'll be presented with a link to follow that will grant the app the correct security access. Follow the link and then copy/paste the token into the command line. This will create your `token.yaml` file.  
 
 ## Usage
 ```
@@ -26,7 +28,10 @@ You will be prompted for a Spreadsheet Id. This can be found in the url of your 
 
 https://docs.google.com/spreadsheets/d/**the_id_is_found_here_and_is_rather_long**/edit#gid=0
 
-You can also pass the argument in rather than wait for input `ruby main.rb SPREADSHEET_ID`
+You can also pass the argument in rather than wait for input 
+```
+ruby main.rb SPREADSHEET_ID
+```
 
 
 ## Running the tests
