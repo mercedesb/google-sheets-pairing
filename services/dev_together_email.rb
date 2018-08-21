@@ -28,38 +28,15 @@ class DevTogetherEmail
     puts "Got Mentee email data"
 
     rows.each do |row|
-      next if row.length < 8
-      mentor_name = row[2]
+      next if row.length < 8 # skip the unmatched peeps
+
       mentor_email = row[3]
-      mentee_name = row[4]
-      mentee_email = row[5]
-      mentee_code = row[6]
-      mentee_feedback_requested = row[7]
-
-      # string interpolate body with row inputs
-      mentor_body = mentor_body_string_format.gsub('[MENTOR_NAME]', mentor_name)
-                                             .gsub('[MENTOR_EMAIL]', mentor_email)
-                                             .gsub('[MENTEE_NAME]', mentee_name)
-                                             .gsub('[MENTEE_EMAIL]', mentee_email)
-                                             .gsub('[MENTEE_CODE]', mentee_code)
-                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
-
-      # read to from row inputs
-      to = mentor_email
-      puts "Creating draft for #{mentor_name} (#{mentor_email})"
-      resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentor_subject, body: mentor_body)
-#resp.message.id
-      mentee_body = mentee_body_string_format.gsub('[MENTOR_NAME]', mentor_name)
-                                             .gsub('[MENTOR_EMAIL]', mentor_email)
-                                             .gsub('[MENTEE_NAME]', mentee_name)
-                                             .gsub('[MENTEE_EMAIL]', mentee_email)
-                                             .gsub('[MENTEE_CODE]', mentee_code)
-                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
+      mentor_body = replace_pairing_data(mentor_body_string_format, row)
+      create_draft(mentor_email, mentor_subject, mentor_body)
       
-      to = mentee_email
-      puts "Creating draft for #{mentee_name} (#{mentee_email})"
-      resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentee_subject, body: mentee_body)
-
+      mentee_email = row[5]
+      mentee_body = replace_pairing_data(mentee_body_string_format, row)
+      create_draft(mentee_email, mentee_subject, mentee_body)
     end
   end
 
@@ -75,5 +52,27 @@ class DevTogetherEmail
 
   def mentee_email_data
     @mentee_email_data ||= @sheets_service.batch_get_values(@spreadsheet_id, [MENTEE_EMAIL_SHEET_RANGE])
+  end
+
+  def replace_pairing_data(input_string, row_data)
+    mentor_name = row_data[2]
+    mentor_email = row_data[3]
+    mentee_name = row_data[4]
+    mentee_email = row_data[5]
+    mentee_code = row_data[6]
+    mentee_feedback_requested = row_data[7]
+
+    input_string.gsub('[MENTOR_NAME]', mentor_name)
+                .gsub('[MENTOR_EMAIL]', mentor_email)
+                .gsub('[MENTEE_NAME]', mentee_name)
+                .gsub('[MENTEE_EMAIL]', mentee_email)
+                .gsub('[MENTEE_CODE]', mentee_code)
+                .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
+  end
+
+  def create_draft(to, subject, body)
+    puts "Creating draft for #{to}"
+    #resp.message.id
+    resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: subject, body: body)
   end
 end
