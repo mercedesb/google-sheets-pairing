@@ -28,14 +28,14 @@ class GmailService < BaseGoogleService
     @service.authorization = authorize()
   end
 
-  def create_draft()
+  def create_draft(to: , from: , subject: , body: )
     mail = Mail.new 
-    mail.from     = "devtogetherchi@gmail.com"
-    mail.to       = "mercedesrbernard@gmail.com"
+    mail.to       = to
+    mail.from     = from
+    mail.subject  = subject
+    mail.body     =  body
     # mail.cc       = params[:email][:cc]
     # mail.bcc      = params[:email][:bcc]
-    mail.subject  = "Test"
-    mail.body     =  "Test body"
 
     draft = Google::Apis::GmailV1::Draft.new
     message = Google::Apis::GmailV1::Message.new

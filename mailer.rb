@@ -1,11 +1,11 @@
-require './services/gmail_service'
+require './services/dev_together_email'
 
-# if ARGV[0]
-#   sheet_id = ARGV[0]
-# else
-#   puts 'Sheet Id:'
-#   sheet_id = gets.chomp
-# end
+if ARGV[0]
+  sheet_id = ARGV[0]
+else
+  puts 'Sheet Id:'
+  sheet_id = gets.chomp
+end
 
-mailer = GmailService.new
-mailer.create_draft()
+dev_together_email = DevTogetherEmail.new(sheet_id)
+dev_together_email.run
