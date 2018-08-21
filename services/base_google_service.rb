@@ -18,11 +18,10 @@ require 'googleauth/stores/file_token_store'
 class BaseGoogleService
   OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
   CLIENT_SECRETS_PATH = 'client_secret.json'.freeze
-  CREDENTIALS_PATH = 'token.yaml'.freeze
 
-  def initialize(scope:)
+  def initialize(scope:, credentials_path:)
     client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)
-    token_store = Google::Auth::Stores::FileTokenStore.new(file: CREDENTIALS_PATH)
+    token_store = Google::Auth::Stores::FileTokenStore.new(file: credentials_path)
 
     @authorizer = Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
     @user_id = 'default'

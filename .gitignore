@@ -1,5 +1,7 @@
 client_secret.json
 token.yaml
+gmail_token.yaml
+google_sheets_token.yaml
 
 *.gem
 *.rbc

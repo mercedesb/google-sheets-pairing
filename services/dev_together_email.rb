@@ -15,22 +15,20 @@ class DevTogetherEmail
   def run
     puts "Getting Pair data"
     rows = pairing_data.value_ranges[0].values
-    require 'pry'; binding.pry
     puts "Got Pair data"
-
+    
     puts "Getting Mentor email data"
-    mentor_subject = mentor_email_data.value_ranges[0].values[0]
-    mentor_body_string_format = mentor_email_data.value_ranges[1].values[0]
+    mentor_subject = mentor_email_data.value_ranges[0].values[0][0]
+    mentor_body_string_format = mentor_email_data.value_ranges[0].values[1][0]
     puts "Got Mentor email data"
-
+    
     puts "Getting Mentee email data"
-    mentee_subject = mentee_email_data.value_ranges[0].values[0]
-    mentee_body_string_format = mentee_email_data.value_ranges[1].values[0]
+    mentee_subject = mentee_email_data.value_ranges[0].values[0][0]
+    mentee_body_string_format = mentee_email_data.value_ranges[0].values[1][0]
     puts "Got Mentee email data"
-    require 'pry'; binding.pry
 
     rows.each do |row|
-    require 'pry'; binding.pry
+      next if row.length < 8
       mentor_name = row[2]
       mentor_email = row[3]
       mentee_name = row[4]
@@ -44,21 +42,23 @@ class DevTogetherEmail
                                              .gsub('[MENTEE_NAME]', mentee_name)
                                              .gsub('[MENTEE_EMAIL]', mentee_email)
                                              .gsub('[MENTEE_CODE]', mentee_code)
-                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback)
+                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
 
       # read to from row inputs
       to = mentor_email
-      @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentor_subject, body: mentor_body)
-
+      puts "Creating draft for #{mentor_name} (#{mentor_email})"
+      resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentor_subject, body: mentor_body)
+#resp.message.id
       mentee_body = mentee_body_string_format.gsub('[MENTOR_NAME]', mentor_name)
                                              .gsub('[MENTOR_EMAIL]', mentor_email)
                                              .gsub('[MENTEE_NAME]', mentee_name)
                                              .gsub('[MENTEE_EMAIL]', mentee_email)
                                              .gsub('[MENTEE_CODE]', mentee_code)
-                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback)
+                                             .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
       
-      to = mentor_email
-      @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentee_subject, body: mentee_body)
+      to = mentee_email
+      puts "Creating draft for #{mentee_name} (#{mentee_email})"
+      resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: mentee_subject, body: mentee_body)
 
     end
   end

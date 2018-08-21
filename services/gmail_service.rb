@@ -20,9 +20,10 @@ require 'mail'
 
 class GmailService < BaseGoogleService
   SCOPE = Google::Apis::GmailV1::AUTH_SCOPE
+  CREDENTIALS_PATH = 'gmail_token.yaml'.freeze
 
   def initialize
-    super(scope: SCOPE)
+    super(scope: SCOPE, credentials_path: CREDENTIALS_PATH)
     # Initialize the API
     @service = Google::Apis::GmailV1::GmailService.new
     @service.authorization = authorize()

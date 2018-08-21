@@ -21,9 +21,10 @@ require 'fileutils'
 
 class GoogleSheetsService < BaseGoogleService
   SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
+  CREDENTIALS_PATH = 'google_sheets_token.yaml'.freeze
 
   def initialize
-    super(scope: SCOPE)
+    super(scope: SCOPE, credentials_path: CREDENTIALS_PATH)
     # Initialize the API
     @service = Google::Apis::SheetsV4::SheetsService.new
     @service.authorization = authorize
