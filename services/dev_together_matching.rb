@@ -8,7 +8,8 @@ require './models/pairing/mentorship_value_calculator'
 
 class DevTogetherMatching
   SHEET_RANGE = "B2:I50"
-  NEW_SHEET_TITLE = "Pairing"
+  PAIRING_SHEET_TITLE = "Pairing"
+  UNMATCHED_SHEET_TITLE = "Unmatched"
 
   def initialize(spreadsheet_id)
     @spreadsheet_id = spreadsheet_id
@@ -30,6 +31,8 @@ class DevTogetherMatching
     matched_graph = @matching_algorithm.match(mentorship_graph)
     puts "Writing pairs to new tab in spreadsheet"
     update_pairings_in_sheets(matched_graph)
+    puts "Writing unmatched to new tab in spreadsheet"
+    update_unmatched_in_sheets(matched_graph)
     puts "Done 💅"
   end
 
@@ -60,26 +63,22 @@ class DevTogetherMatching
     pairing_sheet_id = add_pairing_sheet
 
     update_values = []
-    update_values << headers
+    update_values << pairing_headers
     add_pair_rows(matched_graph, update_values)
-    update_values << []
-    add_unmatched_mentor_rows(matched_graph, update_values)
-    update_values << []
-    add_unmatched_mentee_rows(matched_graph, update_values)
     
-    @sheets_service.batch_update(@spreadsheet_id, "#{NEW_SHEET_TITLE}!A1:H50", update_values)
+    @sheets_service.batch_update(@spreadsheet_id, "#{PAIRING_SHEET_TITLE}!A1:H50", update_values)
   end
 
   def add_pairing_sheet
-    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, NEW_SHEET_TITLE)
+    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, PAIRING_SHEET_TITLE)
   end
 
-  def headers
+  def pairing_headers
     ["Mentor Email Sent", "Mentee Email Sent", "Mentor Name", "Mentor Email", "Mentee Name", "Mentee Email", "Mentee Code", "Type of feedback"]
   end
 
-    def add_pair_rows(matched_graph, update_values)
-    row_length = headers.length
+  def add_pair_rows(matched_graph, update_values)
+    row_length = pairing_headers.length
 
     matched_graph.matches.each do |pair| 
       row_value = [].push(*pair.spreadsheet_data)
@@ -92,15 +91,32 @@ class DevTogetherMatching
     end
   end
 
+  def update_unmatched_in_sheets(matched_graph)
+    unmatched_sheet_id = add_unmatched_sheet
+
+    update_values = []
+    update_values << unmatched_headers
+    add_unmatched_mentor_rows(matched_graph, update_values)
+    add_unmatched_mentee_rows(matched_graph, update_values)
+    
+    @sheets_service.batch_update(@spreadsheet_id, "#{UNMATCHED_SHEET_TITLE}!A1:H50", update_values)
+  end
+
+  def add_unmatched_sheet
+    unmatched_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, UNMATCHED_SHEET_TITLE)
+  end
+
+  def unmatched_headers
+    ["Email Sent",  "Type", "Name", "Email"]
+  end
+
   def add_unmatched_mentor_rows(matched_graph, update_values)
-    update_values << ["Unmatched mentors"]
     unmatched_mentors = mentors - matched_graph.matches.map{ |a| a.head.entity }
-    unmatched_mentors.each { |entity| update_values << entity.spreadsheet_data }
+    unmatched_mentors.each { |entity| update_values << ["", "Mentor"].concat(entity.spreadsheet_data) }
   end
 
   def add_unmatched_mentee_rows(matched_graph, update_values)
-    update_values << ["Unmatched mentees"]
     unmatched_mentees = mentees - matched_graph.matches.map{ |a| a.tail.entity }
-    unmatched_mentees.each { |entity| update_values << entity.spreadsheet_data }
+    unmatched_mentees.each { |entity| update_values << ["", "Mentee"].concat(entity.spreadsheet_data) }
   end
 end

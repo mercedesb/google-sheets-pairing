@@ -3,6 +3,7 @@ require './services/gmail_service'
 
 class DevTogetherEmail
   PAIRING_SHEET_RANGE = "Pairing!A2:H50"
+  EXPECTED_ROW_LENGTH = 8
   MENTOR_EMAIL_SHEET_RANGE = "Mentor Email!A1:A2"
   MENTEE_EMAIL_SHEET_RANGE = "Mentee Email!A1:A2"
 
@@ -28,7 +29,7 @@ class DevTogetherEmail
     puts "Got Mentee email data"
 
     rows.each do |row|
-      next if row.length < 8 # skip the unmatched peeps
+      next if row.length < EXPECTED_ROW_LENGTH
 
       mentor_email = row[3]
       mentor_body = replace_pairing_data(mentor_body_string_format, row)
