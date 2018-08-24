@@ -17,7 +17,9 @@ bundle install
 
 You'll need to create a Google client secret in order to use the Sheets and Gmail API. [Follow step 1 here](https://developers.google.com/sheets/api/quickstart/ruby)
 
-Copy the client_secret.json into the root of the repo.
+Copy the `client_secret.json` into the root of the repo.
+
+The first time you run the CLI, you'll be presented with a link to follow that will grant the app the correct security access. Follow the link and then copy/paste the token into the command line. This will create your `token.yaml` file.  
 
 // TODO: Long form steps (https://console.developers.google.com/apis/credentials/wizard ?)
 
