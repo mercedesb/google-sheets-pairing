@@ -32,10 +32,12 @@ class DevTogetherEmail
       next if row.length < EXPECTED_ROW_LENGTH
 
       mentor_email = row[3]
+      mentor_subject = replace_pairing_data(mentor_subject, row)
       mentor_body = replace_pairing_data(mentor_body_string_format, row)
       create_draft(mentor_email, mentor_subject, mentor_body)
       
       mentee_email = row[5]
+      mentee_subject = replace_pairing_data(mentee_subject, row)
       mentee_body = replace_pairing_data(mentee_body_string_format, row)
       create_draft(mentee_email, mentee_subject, mentee_body)
     end
