@@ -83,7 +83,6 @@ bundle exec rspec
 ```
 
 ## Future features
-- Include default email signature in created drafts (https://developers.google.com/gmail/api/v1/reference/users/settings/sendAs#resource)
 - Automatically create email drafts to send to unmatched attendees
 
 ## Built With
