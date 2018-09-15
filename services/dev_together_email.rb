@@ -1,5 +1,6 @@
 require './services/google_sheets_service'
 require './services/gmail_service'
+require 'redcarpet'
 
 class DevTogetherEmail
   PAIRING_SHEET_RANGE = "Pairing!A2:H50"
@@ -11,6 +12,7 @@ class DevTogetherEmail
     @spreadsheet_id = spreadsheet_id
     @sheets_service = GoogleSheetsService.new
     @mail_service = GmailService.new
+    @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true)
   end
 
   def run
@@ -20,26 +22,24 @@ class DevTogetherEmail
     
     puts "Getting Mentor email data"
     mentor_subject = mentor_email_data.value_ranges[0].values[0][0]
-    mentor_body_string_format = mentor_email_data.value_ranges[0].values[1][0]
+    mentor_body_format_string = mentor_email_data.value_ranges[0].values[1][0]
     puts "Got Mentor email data"
     
     puts "Getting Mentee email data"
     mentee_subject = mentee_email_data.value_ranges[0].values[0][0]
-    mentee_body_string_format = mentee_email_data.value_ranges[0].values[1][0]
+    mentee_body_format_string = mentee_email_data.value_ranges[0].values[1][0]
     puts "Got Mentee email data"
 
     rows.each do |row|
       next if row.length < EXPECTED_ROW_LENGTH
 
+      #send mentor email
       mentor_email = row[3]
-      mentor_subject = replace_pairing_data(mentor_subject, row)
-      mentor_body = replace_pairing_data(mentor_body_string_format, row)
-      create_draft(mentor_email, mentor_subject, mentor_body)
+      create_draft(row, mentor_email, mentor_subject, mentor_body_format_string)
       
+      #send mentee email
       mentee_email = row[5]
-      mentee_subject = replace_pairing_data(mentee_subject, row)
-      mentee_body = replace_pairing_data(mentee_body_string_format, row)
-      create_draft(mentee_email, mentee_subject, mentee_body)
+      create_draft(row, mentee_email, mentee_subject, mentee_body_format_string)
     end
   end
 
@@ -73,9 +73,15 @@ class DevTogetherEmail
                 .gsub('[MENTEE_FEEDBACK]', mentee_feedback_requested)
   end
 
-  def create_draft(to, subject, body)
+  def create_draft(row_data, to, subject_format_string, body_format_string)
+    subject = replace_pairing_data(subject_format_string, row_data)
+    body = replace_pairing_data(body_format_string, row_data)
+    body = @markdown.render(body)
+
     puts "Creating draft for #{to}"
+
+    body += "#{@mail_service.signature}"
     #resp.message.id
-    resp = @mail_service.create_draft(to: to, from: "devtogetherchi@gmail.com", subject: subject, body: body)
+    resp = @mail_service.create_draft(to: to, from: @mail_service.email_address, subject: subject, body: body)
   end
 end
