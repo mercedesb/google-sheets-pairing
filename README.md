@@ -57,7 +57,9 @@ You can also pass the argument in rather than wait for input
 ruby mailer.rb SPREADSHEET_ID
 ```
 
-`mailer.rb` expects 2 sheets in your Google Spreadsheet titled 'Mentor Email' and 'Mentee Email'. In each sheet, the content of cell A1 will be used as the email subject, and the content of A2 will be used as the email body. The following tokens will be string replaced with the data from the 'Pairing' sheet.
+`mailer.rb` expects 2 sheets in your Google Spreadsheet titled 'Mentor Email' and 'Mentee Email'. In each sheet, the content of cell A1 will be used as the email subject, and the content of A2 will be used as the email body. The body (cell A2) can be written in markdown which will be parsed and converted to HTML. This way you can add formatting to your email body. 
+
+The following tokens in both the subject and body will be string replaced with the data from the 'Pairing' sheet.
 - `[MENTOR_NAME]`
 - `[MENTEE_EMAIL]`
 - `[MENTEE_NAME]`
