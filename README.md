@@ -2,7 +2,7 @@
 
 A simple ruby CLI app for maximally matching data from Google sheets.
 
-The matcher (`matcher.rb`) is currently set up and configured to read Dev Together event registrations from our Google Form submissions and match mentors and mentees based on the languages and frameworks they have in common.
+The matcher (`matcher.rb`) is currently set up and configured to read Dev Together event registrations from our Google Form submissions and match Mentors and Mentees based on the languages and frameworks they have in common.
 
 The code uses an iteration on the Edmonds matrix in order to calculate a maximum bipartite matching of the 2 data sets.
 
@@ -58,12 +58,12 @@ ruby mailer.rb SPREADSHEET_ID
 ```
 
 `mailer.rb` expects 2 sheets in your Google Spreadsheet titled 'Mentor Email' and 'Mentee Email'. In each sheet, the content of cell A1 will be used as the email subject, and the content of A2 will be used as the email body. The following tokens will be string replaced with the data from the 'Pairing' sheet.
-- [MENTOR_NAME]
-- [MENTEE_EMAIL]
-- [MENTEE_NAME]
-- [MENTEE_EMAIL]
-- [MENTEE_CODE]
-- [MENTEE_FEEDBACK]
+- `[MENTOR_NAME]`
+- `[MENTEE_EMAIL]`
+- `[MENTEE_NAME]`
+- `[MENTEE_EMAIL]`
+- `[MENTEE_CODE]`
+- `[MENTEE_FEEDBACK]`
 
 You do not need to include all of these in your email, but they are available for you.
 
@@ -81,7 +81,7 @@ bundle exec rspec
 ```
 
 ## Future features
-- Include default email signature in created drafts
+- Include default email signature in created drafts (https://developers.google.com/gmail/api/v1/reference/users/settings/sendAs#resource)
 - Automatically create email drafts to send to unmatched attendees
 
 ## Built With
