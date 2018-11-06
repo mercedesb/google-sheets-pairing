@@ -1,6 +1,6 @@
 # google-sheets-pairing
 
-A simple ruby CLI app for maximally matching data from Google sheets.
+A simple ruby CLI app for maximally matching data from Google sheets and creating draft emails.
 
 The matcher (`matcher.rb`) is currently set up and configured to read Dev Together event registrations from our Google Form submissions and match Mentors and Mentees based on the languages and frameworks they have in common.
 
