@@ -103,15 +103,14 @@ GEM
 
 PLATFORMS
   ruby
-  x64-mingw32
 
 DEPENDENCIES
   google-api-client (~> 0.23.0)
-  mail (~> 2.7.0)
+  mail
   pry
   pry-byebug
   rack-test
-  redcarpet (~> 3.4.0)
+  redcarpet
   rspec
   shoulda-matchers
   simplecov
@@ -121,4 +120,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.4
+   1.16.1
