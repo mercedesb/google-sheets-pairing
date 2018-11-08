@@ -6,6 +6,9 @@ class DevTogetherEmail
   PAIRING_SHEET_RANGE = "Pairing!A2:H50"
   EXPECTED_ROW_LENGTH = 8
   EVENT_DETAILS_SHEET_RANGE = "Event Details!A1:A7"
+  MENTOR_EMAIL_SHEET_NAME = "Mentor Email"
+  MENTEE_EMAIL_SHEET_NAME = "Mentee Email"
+  MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE = "A1:A2"
 
   def initialize(spreadsheet_id)
     @spreadsheet_id = spreadsheet_id
@@ -46,6 +49,27 @@ class DevTogetherEmail
       mentee_email = pairing_row[5]
       create_draft(pairing_row, mentee_email, mentee_subject, mentee_body_format_string)
     end
+   
+     #store mentor email into spreadsheet for future reference
+     puts "Creating Mentor Email sheet for future reference"
+     @sheets_service.add_sheet(@spreadsheet_id, MENTOR_EMAIL_SHEET_NAME)
+     puts "Updating Mentor Email sheet with email details"
+     update_values = []
+     update_values << [].push(mentor_subject)
+     update_values << [].push(mentor_body_format_string)
+     @sheets_service.batch_update(@spreadsheet_id, "#{MENTOR_EMAIL_SHEET_NAME}!#{MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE}", update_values)
+     puts "Mentor Email sheet updates done"
+
+     #store mentee email into spreadsheet for future reference
+     puts "Creating Mentee Email sheet for future reference"
+     @sheets_service.add_sheet(@spreadsheet_id, MENTEE_EMAIL_SHEET_NAME)
+     puts "Updating Mentee Email sheet with email details"
+     update_values = []
+     update_values << [].push(mentee_subject)
+     update_values << [].push(mentee_body_format_string)
+     @sheets_service.batch_update(@spreadsheet_id, "#{MENTEE_EMAIL_SHEET_NAME}!#{MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE}", update_values)
+     puts "Mentee Email sheet updates done"
+
     puts "Done 💅"
   end
 
