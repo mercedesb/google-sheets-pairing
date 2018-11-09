@@ -51,24 +51,10 @@ class DevTogetherEmail
     end
    
      #store mentor email into spreadsheet for future reference
-     puts "Creating Mentor Email sheet for future reference"
-     @sheets_service.add_sheet(@spreadsheet_id, MENTOR_EMAIL_SHEET_NAME)
-     puts "Updating Mentor Email sheet with email details"
-     update_values = []
-     update_values << [].push(mentor_subject)
-     update_values << [].push(mentor_body_format_string)
-     @sheets_service.batch_update(@spreadsheet_id, "#{MENTOR_EMAIL_SHEET_NAME}!#{MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE}", update_values)
-     puts "Mentor Email sheet updates done"
+     create_email_sheet("Mentor", MENTOR_EMAIL_SHEET_NAME, mentor_subject, mentor_body_format_string)
 
      #store mentee email into spreadsheet for future reference
-     puts "Creating Mentee Email sheet for future reference"
-     @sheets_service.add_sheet(@spreadsheet_id, MENTEE_EMAIL_SHEET_NAME)
-     puts "Updating Mentee Email sheet with email details"
-     update_values = []
-     update_values << [].push(mentee_subject)
-     update_values << [].push(mentee_body_format_string)
-     @sheets_service.batch_update(@spreadsheet_id, "#{MENTEE_EMAIL_SHEET_NAME}!#{MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE}", update_values)
-     puts "Mentee Email sheet updates done"
+     create_email_sheet("Mentee", MENTEE_EMAIL_SHEET_NAME, mentee_subject, mentee_body_format_string)
 
     puts "Done 💅"
   end
@@ -81,6 +67,19 @@ class DevTogetherEmail
 
   def event_details_data
     @event_details_data ||= @sheets_service.batch_get_values(@spreadsheet_id, [EVENT_DETAILS_SHEET_RANGE])
+  end
+
+  def create_email_sheet(audience, sheet_name, subject, body) 
+    puts "Creating #{audience} Email sheet for future reference"
+    @sheets_service.add_sheet(@spreadsheet_id, sheet_name)
+    
+    puts "Updating #{audience} Email sheet with email details" 
+    #create the update values
+    update_values = []
+    update_values << [].push(subject)
+    update_values << [].push(body)
+    @sheets_service.batch_update(@spreadsheet_id, "#{sheet_name}!#{MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE}", update_values)
+    puts "#{audience} Email sheet updates done"
   end
 
   def replace_pairing_and_event_data(input_string, pairing_row_data)
