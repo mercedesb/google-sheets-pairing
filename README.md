@@ -28,6 +28,16 @@ Copy the file into into the root of the repo and rename to `client_secret.json` 
   - Choose 'OAuth client ID' and give your client a name
   - Download the client credentials file for the OAuth client ID you just created (there's an icon for download on the right)
 
+To send pairing emails, you'll need to maintain your own copy of the markdown files under `/data/email`. Samples have been provided to give you an idea of sample pairing emails to mentors and mentees.
+1. Under `/data/email/mentee/`
+  - Copy and paste the `body_sample.md` in the same directory. Rename the new file `body.md`.
+  - Copy and paste the `subject_sample.md` in the same directory. Rename the new file `subject.md`.
+2. Under `/data/email/mentor/`
+  - Copy and paste the `body_sample.md` in the same directory. Rename the new file `body.md`.
+  - Copy and paste the `subject_sample.md` in the same directory. Rename the new file `subject.md`.
+
+The new files above will determine your email contents to mentors and mentees. Update them as you wish, but they are git-ignored, so they will not be checked into the repository. This is to allow each chapter to be able to maintain their own copy of the emails.
+
 ## Usage
 
 ### Running the matcher
