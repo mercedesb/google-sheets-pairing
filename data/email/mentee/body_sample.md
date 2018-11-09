@@ -7,6 +7,7 @@ Your Mentor for [EVENT_DATE] is [MENTOR_NAME].
 This month's event is at [SPONSOR_NAME]. [SPONSOR_NAME] is located at [SPONSOR_ADDRESS].
 
 [FOOD_INFO]
+sdfs
 
 **What should I do before next week?**
 
