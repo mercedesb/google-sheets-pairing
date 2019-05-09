@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,22 +22,22 @@ require 'mail'
 
 class GmailService < BaseGoogleService
   SCOPE = Google::Apis::GmailV1::AUTH_SCOPE
-  CREDENTIALS_PATH = 'gmail_token.yaml'.freeze
+  CREDENTIALS_PATH = 'gmail_token.yaml'
 
   def initialize
     super(scope: SCOPE, credentials_path: CREDENTIALS_PATH)
     # Initialize the API
     @service = Google::Apis::GmailV1::GmailService.new
-    @service.authorization = authorize()
+    @service.authorization = authorize
   end
 
-  def create_draft(to: , from: , subject: , body: )
-    mail = Mail.new 
+  def create_draft(to:, from:, subject:, body:)
+    mail = Mail.new
     mail.to       = to
     mail.from     = from
     mail.subject  = subject
-    mail.content_type ='text/html; charset=UTF-8'
-    mail.body     =  body
+    mail.content_type = 'text/html; charset=UTF-8'
+    mail.body = body
     # mail.cc       = params[:email][:cc]
     # mail.bcc      = params[:email][:bcc]
 
@@ -43,11 +45,11 @@ class GmailService < BaseGoogleService
     message = Google::Apis::GmailV1::Message.new
     message.raw = mail.to_s
     draft.message = message
-    draft_response = @service.create_user_draft("me", draft)
+    draft_response = @service.create_user_draft('me', draft)
   end
 
   def list_drafts
-    @drafts_response ||= @service.list_user_drafts("me")
+    @drafts_response ||= @service.list_user_drafts('me')
   end
 
   def drafts
@@ -55,11 +57,11 @@ class GmailService < BaseGoogleService
   end
 
   def send_draft(draft)
-    @service.send_user_draft("me", draft)
+    @service.send_user_draft('me', draft)
   end
 
   def user_setting_send_as
-    @user_setting_send_as ||= @service.get_user_setting_send_as("me", email_address)
+    @user_setting_send_as ||= @service.get_user_setting_send_as('me', email_address)
   end
 
   def signature
@@ -67,7 +69,7 @@ class GmailService < BaseGoogleService
   end
 
   def user_profile
-    @user_profile ||= @service.get_user_profile("me")
+    @user_profile ||= @service.get_user_profile('me')
   end
 
   def email_address

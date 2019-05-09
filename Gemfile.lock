@@ -106,11 +106,11 @@ PLATFORMS
 
 DEPENDENCIES
   google-api-client (~> 0.23.0)
-  mail
+  mail (~> 2.7.0)
   pry
   pry-byebug
   rack-test
-  redcarpet
+  redcarpet (~> 3.4.0)
   rspec
   shoulda-matchers
   simplecov

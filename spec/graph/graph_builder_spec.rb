@@ -1,39 +1,43 @@
 # frozen_string_literal: true
 
-require "spec_helper"
-require "pairing/mentor"
-require "pairing/mentee"
-require "pairing/mentorship_value_calculator"
-require "graph/graph_builder"
+require 'spec_helper'
+require 'pairing/mentor'
+require 'pairing/mentee'
+require 'pairing/mentorship_value_calculator'
+require 'graph/graph_builder'
 
 RSpec.describe GraphBuilder, type: :model do
-  let(:mentors) { [
-      Mentor.new("s1", "email", ["a", "b"]),
-      Mentor.new("s2", "email", ["c"]),
-      Mentor.new("s3", "email", ["a", "d"])
-    ] }
-  let(:mentees) { [
-      Mentee.new("p1", "email", "code", "feedback", "a"),
-      Mentee.new("p2", "email", "code", "feedback", "b"),
-      Mentee.new("p3", "email", "code", "feedback", "b"),
-      Mentee.new("p4", "email", "code", "feedback", "c")
-    ] }
+  let(:mentors) do
+    [
+      Mentor.new('s1', 'email', %w[a b]),
+      Mentor.new('s2', 'email', ['c']),
+      Mentor.new('s3', 'email', %w[a d])
+    ]
+  end
+  let(:mentees) do
+    [
+      Mentee.new('p1', 'email', 'code', 'feedback', 'a'),
+      Mentee.new('p2', 'email', 'code', 'feedback', 'b'),
+      Mentee.new('p3', 'email', 'code', 'feedback', 'b'),
+      Mentee.new('p4', 'email', 'code', 'feedback', 'c')
+    ]
+  end
 
   subject { described_class.new }
-  
-  # expected: 
+
+  # expected:
   # [1 1 1 0]
   # [0 0 0 1]
   # [1 0 0 0]
 
-  describe "#build" do
-    it "creates a graph with the expected shape" do
+  describe '#build' do
+    it 'creates a graph with the expected shape' do
       graph = subject.build(mentors, mentees, MentorshipValueCalculator.new)
       expect(graph.length).to eq(3)
-      expect(graph["s1"].length).to eq(4)
-      expect(graph["s1"].edges.map {|edge| edge.value}).to eq([1, 1, 1, 0])
-      expect(graph["s2"].edges.map {|edge| edge.value}).to eq([0, 0, 0, 1])
-      expect(graph["s3"].edges.map {|edge| edge.value}).to eq([1, 0, 0, 0])
+      expect(graph['s1'].length).to eq(4)
+      expect(graph['s1'].edges.map(&:value)).to eq([1, 1, 1, 0])
+      expect(graph['s2'].edges.map(&:value)).to eq([0, 0, 0, 1])
+      expect(graph['s3'].edges.map(&:value)).to eq([1, 0, 0, 0])
     end
   end
 end

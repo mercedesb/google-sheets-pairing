@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mentee
   attr_reader :name, :email, :code_link, :feedback_type, :preference
 

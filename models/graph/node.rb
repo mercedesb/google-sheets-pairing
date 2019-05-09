@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './models/graph/edge'
 require 'forwardable'
 
@@ -16,9 +18,7 @@ class Node
     @edges << Edge.new(self, node, edge_value)
   end
 
-  def edges
-    @edges
-  end
+  attr_reader :edges
 
   def length
     @edges.length

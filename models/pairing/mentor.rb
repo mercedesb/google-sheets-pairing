@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mentor
   attr_reader :name, :email, :preferences
 

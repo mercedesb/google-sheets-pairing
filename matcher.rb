@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './services/dev_together_matching'
 
 if ARGV[0]

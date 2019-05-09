@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require './services/google_sheets_service'
 require './services/gmail_service'
 require 'redcarpet'
 
-class DevTogetherEmail
-  PAIRING_SHEET_RANGE = "Pairing!A2:H50"
+class DevTogetherPairingEmail
+  PAIRING_SHEET_RANGE = 'Pairing!A2:H50'
   EXPECTED_ROW_LENGTH = 8
-  EVENT_DETAILS_SHEET_RANGE = "Event Details!A1:A7"
-  MENTOR_EMAIL_SHEET_NAME = "Mentor Email"
-  MENTEE_EMAIL_SHEET_NAME = "Mentee Email"
-  MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE = "A1:A2"
+  EVENT_DETAILS_SHEET_RANGE = 'Event Details!A1:A7'
+  MENTOR_EMAIL_SHEET_NAME = 'Mentor Email'
+  MENTEE_EMAIL_SHEET_NAME = 'Mentee Email'
+  MENTOR_AND_MENTEE_EMAIL_SHEET_RANGE = 'A1:A2'
 
   def initialize(spreadsheet_id)
     @spreadsheet_id = spreadsheet_id
@@ -18,45 +20,45 @@ class DevTogetherEmail
   end
 
   def run
-    puts "Getting Pair data"
+    puts 'Getting Pair data'
     pairing_rows = pairing_data.value_ranges[0].values
-    puts "Got Pair data"
+    puts 'Got Pair data'
 
-    puts "Getting Mentor email data"
-    #determine path of mentor email markdown files
-    mentor_email_dir = File.join(File.dirname(__FILE__), '../data/email/mentor')   
-    #read each markdown accordingly
+    puts 'Getting Mentor email data'
+    # determine path of mentor email markdown files
+    mentor_email_dir = File.join(File.dirname(__FILE__), '../data/email/mentor')
+    # read each markdown accordingly
     mentor_subject = File.read("#{mentor_email_dir}/subject.md")
     mentor_body_format_string = File.read("#{mentor_email_dir}/body.md")
-    puts "Got Mentor email data"
-    
-    puts "Getting Mentee email data"
-    #determine path of mentee email markdown files
+    puts 'Got Mentor email data'
+
+    puts 'Getting Mentee email data'
+    # determine path of mentee email markdown files
     mentee_email_dir = File.join(File.dirname(__FILE__), '../data/email/mentee')
-    #read each markdown accordingly
+    # read each markdown accordingly
     mentee_subject = File.read("#{mentee_email_dir}/subject.md")
     mentee_body_format_string = File.read("#{mentee_email_dir}/body.md")
-    puts "Got Mentee email data"
+    puts 'Got Mentee email data'
 
     pairing_rows.each do |pairing_row|
       next if pairing_row.length < EXPECTED_ROW_LENGTH
 
-      #send mentor email
+      # send mentor email
       mentor_email = pairing_row[3]
       create_draft(pairing_row, mentor_email, mentor_subject, mentor_body_format_string)
-      
-      #send mentee email
+
+      # send mentee email
       mentee_email = pairing_row[5]
       create_draft(pairing_row, mentee_email, mentee_subject, mentee_body_format_string)
     end
-   
-     #store mentor email into spreadsheet for future reference
-     create_email_sheet("Mentor", MENTOR_EMAIL_SHEET_NAME, mentor_subject, mentor_body_format_string)
 
-     #store mentee email into spreadsheet for future reference
-     create_email_sheet("Mentee", MENTEE_EMAIL_SHEET_NAME, mentee_subject, mentee_body_format_string)
+    # store mentor email into spreadsheet for future reference
+    create_email_sheet('Mentor', MENTOR_EMAIL_SHEET_NAME, mentor_subject, mentor_body_format_string)
 
-    puts "Done 💅"
+    # store mentee email into spreadsheet for future reference
+    create_email_sheet('Mentee', MENTEE_EMAIL_SHEET_NAME, mentee_subject, mentee_body_format_string)
+
+    puts 'Done 💅'
   end
 
   private
@@ -69,12 +71,12 @@ class DevTogetherEmail
     @event_details_data ||= @sheets_service.batch_get_values(@spreadsheet_id, [EVENT_DETAILS_SHEET_RANGE])
   end
 
-  def create_email_sheet(audience, sheet_name, subject, body) 
+  def create_email_sheet(audience, sheet_name, subject, body)
     puts "Creating #{audience} Email sheet for future reference"
     @sheets_service.add_sheet(@spreadsheet_id, sheet_name)
-    
-    puts "Updating #{audience} Email sheet with email details" 
-    #create the update values
+
+    puts "Updating #{audience} Email sheet with email details"
+    # create the update values
     update_values = []
     update_values << [].push(subject)
     update_values << [].push(body)
@@ -123,8 +125,8 @@ class DevTogetherEmail
 
     puts "Creating draft for #{to}"
 
-    body += "#{@mail_service.signature}"
-    #resp.message.id
+    body += @mail_service.signature.to_s
+    # resp.message.id
     resp = @mail_service.create_draft(to: to, from: @mail_service.email_address, subject: subject, body: body)
   end
 end

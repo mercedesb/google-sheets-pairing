@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +18,8 @@ require 'googleauth'
 require 'googleauth/stores/file_token_store'
 
 class BaseGoogleService
-  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
-  CLIENT_SECRETS_PATH = 'client_secret.json'.freeze
+  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+  CLIENT_SECRETS_PATH = 'client_secret.json'
 
   def initialize(scope:, credentials_path:)
     client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)

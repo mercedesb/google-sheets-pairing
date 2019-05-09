@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Edge
   attr_reader :head
   attr_reader :tail
@@ -12,7 +14,7 @@ class Edge
   end
 
   def to_s
-    "#{head.to_s}, #{tail.to_s}"
+    "#{head}, #{tail}"
   end
 
   def spreadsheet_data

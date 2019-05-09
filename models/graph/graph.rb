@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Graph
   attr_reader :nodes
   attr_accessor :matches
