@@ -8,6 +8,7 @@ require 'pairing/mentee'
 require 'pairing/mentorship_value_calculator'
 
 RSpec.describe MaxBipartiteMatching, type: :model do
+  # rubocop:disable Metrics/LineLength
   let(:mentors) do
     [
       Mentor.new('Keanan K', 'email', ['Javascript (vanilla js)', 'jQuery', 'Python', 'HTML', 'CSS', 'SASS/SCSS', 'PHP', 'WordPress']),
@@ -21,6 +22,8 @@ RSpec.describe MaxBipartiteMatching, type: :model do
       Mentor.new('Aji S', 'email', ['Javascript (vanilla js)', 'React', 'jQuery', 'Ruby', 'Ruby on Rails', 'HTML', 'CSS', 'SASS/SCSS', 'Shell'])
     ]
   end
+  # rubocop:enable Metrics/LineLength
+
   let(:mentees) do
     [
       Mentee.new('A', 'email', 'code', 'feedback', 'React'),

@@ -55,7 +55,7 @@ class GoogleSheetsService < BaseGoogleService
       }
     ]
     request_body = Google::Apis::SheetsV4::BatchUpdateValuesRequest.new(value_input_option: 'USER_ENTERED', data: data)
-    response = @service.batch_update_values(spreadsheet_id, request_body)
+    @service.batch_update_values(spreadsheet_id, request_body)
   end
 
   def add_sheet(spreadsheet_id, title)
@@ -68,9 +68,9 @@ class GoogleSheetsService < BaseGoogleService
     begin
       response = @service.batch_update_spreadsheet(spreadsheet_id, request_body)
       sheet = response.replies[0].add_sheet
-    rescue Google::Apis::ClientError => e
+    rescue Google::Apis::ClientError
       response = @service.get_spreadsheet(spreadsheet_id, fields: 'sheets.properties.sheetId,sheets.properties.title')
-      sheet = response.sheets.find { |sheet| sheet.properties.title == title }
+      sheet = response.sheets.find { |s| s.properties.title == title }
     end
 
     sheet.properties.sheet_id

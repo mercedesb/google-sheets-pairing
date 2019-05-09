@@ -62,7 +62,7 @@ class DevTogetherMatching
   end
 
   def update_pairings_in_sheets(matched_graph)
-    pairing_sheet_id = add_pairing_sheet
+    add_pairing_sheet
 
     update_values = []
     update_values << pairing_headers
@@ -72,12 +72,14 @@ class DevTogetherMatching
   end
 
   def add_pairing_sheet
-    pairing_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, PAIRING_SHEET_TITLE)
+    @sheets_service.add_sheet(@spreadsheet_id, PAIRING_SHEET_TITLE)
   end
 
+  # rubocop:disable Metrics/LineLength
   def pairing_headers
     ['Mentor Email Sent', 'Mentee Email Sent', 'Mentor Name', 'Mentor Email', 'Mentee Name', 'Mentee Email', 'Mentee Code', 'Type of feedback']
   end
+  # rubocop:enable Metrics/LineLength
 
   def add_pair_rows(matched_graph, update_values)
     row_length = pairing_headers.length
@@ -92,7 +94,7 @@ class DevTogetherMatching
   end
 
   def update_unmatched_in_sheets(matched_graph)
-    unmatched_sheet_id = add_unmatched_sheet
+    add_unmatched_sheet
 
     update_values = []
     update_values << unmatched_headers
@@ -103,7 +105,7 @@ class DevTogetherMatching
   end
 
   def add_unmatched_sheet
-    unmatched_sheet_id = @sheets_service.add_sheet(@spreadsheet_id, UNMATCHED_SHEET_TITLE)
+    @sheets_service.add_sheet(@spreadsheet_id, UNMATCHED_SHEET_TITLE)
   end
 
   def unmatched_headers

@@ -127,6 +127,6 @@ class DevTogetherPairingEmail
 
     body += @mail_service.signature.to_s
     # resp.message.id
-    resp = @mail_service.create_draft(to: to, from: @mail_service.email_address, subject: subject, body: body)
+    @mail_service.create_draft(to: to, from: @mail_service.email_address, subject: subject, body: body)
   end
 end

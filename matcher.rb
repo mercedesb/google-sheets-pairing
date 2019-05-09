@@ -10,4 +10,4 @@ else
 end
 
 matcher = DevTogetherMatching.new(sheet_id)
-matches = matcher.run
+matcher.run

@@ -45,11 +45,11 @@ class GmailService < BaseGoogleService
     message = Google::Apis::GmailV1::Message.new
     message.raw = mail.to_s
     draft.message = message
-    draft_response = @service.create_user_draft('me', draft)
+    @service.create_user_draft('me', draft)
   end
 
   def list_drafts
-    @drafts_response ||= @service.list_user_drafts('me')
+    @list_drafts ||= @service.list_user_drafts('me')
   end
 
   def drafts
