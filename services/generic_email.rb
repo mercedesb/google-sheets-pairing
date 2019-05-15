@@ -5,7 +5,7 @@ require './services/gmail_service'
 require 'redcarpet'
 
 class GenericEmail
-  RECIPIENT_SHEET_RANGE = 'Recipients!A2:D103'
+  RECIPIENT_SHEET_RANGE = 'Recipients!A2:D111'
   EXPECTED_ROW_LENGTH = 2
   EMAIL_SHEET_NAME = 'Email Sent'
   EMAIL_SHEET_RANGE = 'A1:A2'
@@ -32,7 +32,7 @@ class GenericEmail
     recipient_rows.each do |recipient_row|
       next if recipient_row.length < EXPECTED_ROW_LENGTH
       email = recipient_row[3]
-      next if email.strip.empty?
+      next if email.nil? || email.empty?
 
       # send email
       create_draft(recipient_row, email, email_subject, email_content)

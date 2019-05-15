@@ -67,6 +67,10 @@ You can also pass the argument in rather than wait for input
 ruby mailer.rb SPREADSHEET_ID
 ```
 
+By default, `mailer.rb` will send a Dev Together pairing email but you can use the `-g` option to send a general/generic email.
+
+#### Dev Together Pairing email
+
 `mailer.rb` expects 1 sheet in your Google Spreadsheet titled 'Event Details'.
 
 The contents are parsed as follows:
@@ -98,6 +102,31 @@ Additionally, the following tokens in both the subject and body will be string r
 - `[SPONSOR_NAME]`
 - `[SPONSOR_ADDRESS]`
 - `[FOOD_INFO]`
+
+You do not need to include all of these in your email, but they are available for you.
+
+#### General/Generic email
+
+`mailer.rb` expects 1 sheet in your Google Spreadsheet titled 'Recipients'.
+
+The contents are parsed as follows:
+* Column A - Full name (e.g. Mercedes Bernard)
+* Cell B - First name (e.g. Mercedes)
+* Cell D - Email (e.g. devtogetherchi@gmail.com)
+
+Email content data is read locally from the folder `/data/email/generic/email_content.md`.
+
+The subject can be passed in using the `--subject` or `-s` flag from the CLI. To include a quote in the subject, it's escaped like this 
+```
+ruby mailer.rb SHEET_ID -g -s 'You are personally invited to Dev Together'\''s 1-year celebration!'
+```
+
+The markdown contents will be parsed and converted to HTML.
+
+The following tokens in the body will be string replaced with the data from the 'Recipients' sheet.
+- `[FULL_NAME]`
+- `[FIRST_NAME]`
+- `[EMAIL]`
 
 You do not need to include all of these in your email, but they are available for you.
 
