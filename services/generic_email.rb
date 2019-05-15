@@ -5,7 +5,7 @@ require './services/gmail_service'
 require 'redcarpet'
 
 class GenericEmail
-  RECIPIENT_SHEET_RANGE = 'Recipients!A2:B2'
+  RECIPIENT_SHEET_RANGE = 'Recipients!A2:D103'
   EXPECTED_ROW_LENGTH = 2
   EMAIL_SHEET_NAME = 'Email Sent'
   EMAIL_SHEET_RANGE = 'A1:A2'
@@ -31,9 +31,10 @@ class GenericEmail
 
     recipient_rows.each do |recipient_row|
       next if recipient_row.length < EXPECTED_ROW_LENGTH
+      email = recipient_row[3]
+      next if email.strip.empty?
 
       # send email
-      email = recipient_row[1]
       create_draft(recipient_row, email, email_subject, email_content)
     end
 
@@ -63,10 +64,12 @@ class GenericEmail
   end
 
   def replace_recipient_data(input_string, recipient_row_data)
-    name = recipient_row_data[0]
-    email = recipient_row_data[1]
+    full_name = recipient_row_data[0]
+    first_name = recipient_row_data[1]
+    email = recipient_row_data[3]
     # replace all tokens with appropriate data
-    input_string.gsub('[NAME]', name)
+    input_string.gsub('[FULL_NAME]', full_name)
+                .gsub('[FIRST_NAME]', first_name)
                 .gsub('[EMAIL]', email)
   end
 
