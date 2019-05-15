@@ -59,3 +59,4 @@ build-iPhoneSimulator/
 # allow each chapter to maintain their own emails for mentee/mentor emails
 data/email/*/body.md
 data/email/*/subject.md
+data/email/generic/*
