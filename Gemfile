@@ -6,7 +6,7 @@ ruby '2.6.3'
 
 gem 'google-api-client', '~> 0.30'
 gem 'mail', '~> 2.7'
-gem 'redcarpet', '~> 3.4'
+gem 'redcarpet', '~> 3.5'
 
 group :development, :test do
   gem 'pry'
